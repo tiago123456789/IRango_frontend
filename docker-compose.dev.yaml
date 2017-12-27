@@ -1,0 +1,13 @@
+version: "3"
+services:
+  irango_frontend:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    ports:
+      - 8080:3000
+    volumes:
+      - .:/home/app/irango_frontend/
+      - /home/app/irango_frontend/node_modules
+    image: tiagorosadacosta/irango
+    container_name: irangoFrontend
