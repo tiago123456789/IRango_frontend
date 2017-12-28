@@ -6,17 +6,19 @@ import {
     Marker,
 } from "react-google-maps";
 import axios from "axios";
-import logo from './logo.svg';
-import './App.css';
+import Header from "./component/Header";
+import { Route, Switch } from "react-router-dom";
+import ListaRestaurante from "./component/Restaurante/ListaRestaurante";
+import MapaRestaurante from "./component/Restaurante/MapaRestaurante";
 
 const Mapa = withScriptjs(withGoogleMap(props =>
     <GoogleMap
         defaultZoom={16}
         defaultCenter={{ lat: props.latitude, lng: props.longitude }} >
         {   props.restaurantes.length > 0 &&
-            props.restaurantes.map((restaurante, indice) => {
-                return <Marker key={indice} position={restaurante}/>
-            })
+        props.restaurantes.map((restaurante, indice) => {
+            return <Marker key={indice} position={restaurante}/>
+        })
         }
     </GoogleMap>
 ));
@@ -65,35 +67,22 @@ class App extends Component {
      * @description Método do ciclo de vida do react. Executado após renderizar o componente.
      */
     componentDidMount() {
-       this.getPositionCurrent();
+        this.getPositionCurrent();
     }
 
     render() {
-        if (!this.state.isGettingPosition) {
-            return <p>Getting position current...</p>
-        } else {
-            return (
-                <div className="App">
-                    <header className="App-header">
-                        <img src={logo} className="App-logo" alt="logo" />
-                        <h1 className="App-title">Projeto iRango  {this.state.counter}</h1>
-                        <button onClick={() => this.getRestaurantesProximos(this.state.location.lat, this.state.location.lng)}>Atualizar Restaurantes</button>
-                    </header>
-                    <section className="content">
-                        <Mapa
-                            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwPZx8_pg7flVJoWvxIf8lq0Z4oLOuwPY"
-                            loadingElement={<div style={{ height: `100%` }} />}
-                            containerElement={<div style={{ height: `400px` }} />}
-                            mapElement={<div style={{ height: `100%` }} />}
-                            latitude={this.state.location.lat}
-                            longitude={this.state.location.lng}
-                            restaurantes={this.state.restaurantes}
-                        >
-                        </Mapa>
-                    </section>
-                 </div>
-            );
-        }
+        const { children } = this.props;
+        return (
+            <div>
+                <Header />
+                <div className="container">
+                    <Switch>
+                                <Route path="/restaurantes" component={ListaRestaurante} />
+                        <Route path="/restaurantes/:lat/:lng" component={MapaRestaurante}></Route>
+                    </Switch>
+                </div>
+            </div>
+        );
     }
 }
 
