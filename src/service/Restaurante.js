@@ -13,14 +13,32 @@ export default class Restaurante {
      * @returns {Promise.<void>}
      */
     async findAll() {
-        let response = null;
         try {
-            response = await axios.get(`${this._url}${this._endpoint}`);
+            const response = await axios.get(`${this._url}${this._endpoint}`);
+            return response.data;
         } catch(e) {
-            response = e;
+            throw new Error(e);
         }
+    }
 
-        return response.data;
+    /**
+     * @description Busca todos os restaurantes próximos a lat é lng especificado.
+     * @returns {*}
+     */
+    findAllUpcoming(lat, lng) {
+        return this.tryCatch(async () => {
+            const response = await axios.get(`${this._url}${this._endpoint}/distancia?lat=${lat}&lng=${lng}`);
+            return response.data;
+        });
+    }
+
+
+    tryCatch(callback) {
+        try {
+            return callback();
+        } catch(e) {
+            throw new Error(e);
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ import axios from "axios";
 import Header from "./component/Header";
 import { Route, Switch } from "react-router-dom";
 import ListaRestaurante from "./component/Restaurante/ListaRestaurante";
+import NovoRestaurante from "./component/Restaurante/NovoRestaurante";
 import MapaRestaurante from "./component/Restaurante/MapaRestaurante";
 
 const Mapa = withScriptjs(withGoogleMap(props =>
@@ -35,50 +36,19 @@ class App extends Component {
         };
     }
 
-    /**
-     * @description Get restaurantes proximos a localização definida.
-     */
-    async getRestaurantes(latitude = this.state.location.lat, longitude = this.state.location.lng) {
-        const response = await axios.get(`http://localhost:3000/restaurantes/distancia?lat=${latitude}&lng=${longitude}`)
-        this.alterState("restaurantes", response.data);
-    }
-
-    /**
-     * @description Alter state de determine info in state.
-     * @param chave
-     * @param content
-     */
-    alterState(chave, content) {
-        this.setState({ [chave]: content });
-    }
-
-    /**
-     * @description Get position current of client access application.
-     */
-    getPositionCurrent() {
-        navigator.geolocation.getCurrentPosition(async (position) => {
-            this.alterState("isGettingPosition", true);
-            this.alterState("location", { lat: position.coords.latitude, lng: position.coords.longitude});
-            this.getRestaurantes();
-        })
-    }
-
-    /**
-     * @description Método do ciclo de vida do react. Executado após renderizar o componente.
-     */
-    componentDidMount() {
-        this.getPositionCurrent();
-    }
-
     render() {
         const { children } = this.props;
         return (
             <div>
                 <Header />
+                <br/>
                 <div className="container">
                     <Switch>
-                                <Route path="/restaurantes" component={ListaRestaurante} />
+                        <Route exact path="/restaurantes" component={ListaRestaurante} />
+                        <Route exact path="/restaurantes/novo" component={NovoRestaurante} />
                         <Route path="/restaurantes/:lat/:lng" component={MapaRestaurante}></Route>
+                        <Route path="/" component={MapaRestaurante}></Route>
+                        <Route path="*" component={MapaRestaurante}></Route>
                     </Switch>
                 </div>
             </div>

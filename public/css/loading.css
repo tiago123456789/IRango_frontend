@@ -1,0 +1,19 @@
+.loading {
+    width: 20%;
+    margin: 10px auto;
+}
+
+
+@media screen and (max-width: 700px) {
+
+    .loading {
+        margin-left: 25%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+
+    .loading {
+        margin-left: 15%;
+    }
+}

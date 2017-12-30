@@ -34,14 +34,16 @@ export default class ListaRestaurante extends Component {
                     <td>{restaurante._id}</td>
                     <td>{restaurante.name}</td>
                     <td>
-                        <button
-                                onClick={() => this.deletar(restaurante._id)} className="btn btn-sm btn-danger">
-                            <i className="fa fa-trash"></i>
-                        </button>
-                        <Link className="btn btn-sm btn-primary"
-                              to={`/restaurantes/${restaurante.loc.coordinates[1]}/${restaurante.loc.coordinates[0]}`} >
-                            <i className="fa fa-map-o"></i>
-                        </Link>
+                        <div className="btn-group">
+                            <button
+                                    onClick={() => this.deletar(restaurante._id)} className="btn btn-sm btn-danger">
+                                <i className="fa fa-trash"></i>
+                            </button>
+                            <Link className="btn btn-sm btn-primary"
+                                  to={`/restaurantes/${restaurante.loc.coordinates[1]}/${restaurante.loc.coordinates[0]}`} >
+                                <i className="fa fa-map-o"></i>
+                            </Link>
+                        </div>
                     </td>
                 </tr>
             )
@@ -52,18 +54,26 @@ export default class ListaRestaurante extends Component {
         return (
             <div className="container">
                 <h1>Restaurantes</h1>
-                <table className="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nome</th>
-                        <th>Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        { this.montarListaRestaurantes() }
-                    </tbody>
-                </table>
+
+                <Link to="/restaurantes/novo" className="btn btn-primary">
+                    <i className="fa fa-plus"></i> &nbsp;
+                    Novo Restaurante
+                </Link>
+
+                <div className="table-responsive">
+                    <table className="table table-bordered table-striped text-center">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            { this.montarListaRestaurantes() }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         )
     }
