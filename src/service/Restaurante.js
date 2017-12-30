@@ -13,12 +13,10 @@ export default class Restaurante {
      * @returns {Promise.<void>}
      */
     async findAll() {
-        try {
+        return this._tryCatch(async () => {
             const response = await axios.get(`${this._url}${this._endpoint}`);
             return response.data;
-        } catch(e) {
-            throw new Error(e);
-        }
+        });
     }
 
     /**
@@ -26,19 +24,19 @@ export default class Restaurante {
      * @returns {*}
      */
     findAllUpcoming(lat, lng) {
-        return this.tryCatch(async () => {
+        return this._tryCatch(async () => {
             const response = await axios.get(`${this._url}${this._endpoint}/distancia?lat=${lat}&lng=${lng}`);
             return response.data;
         });
     }
 
-
-    tryCatch(callback) {
-        try {
-            return callback();
-        } catch(e) {
-            throw new Error(e);
-        }
+    /**
+     * @description Cria um novo restaurante.
+     * @param content
+     * @returns {*}
+     */
+    create(content) {
+        return this._tryCatch(async () => await axios.post(`${this._url}${this._endpoint}`, content));
     }
 
     /**
@@ -46,7 +44,19 @@ export default class Restaurante {
      * @returns {Promise.<void>}
      */
     async deletar(id) {
-            console.log(id);
           await axios.delete(`${this._url}${this._endpoint}/${id}`);
+    }
+
+    /**
+     * @description Faz try catch das funções assíncronas.
+     * @param callback
+     * @returns {*}
+     */
+    _tryCatch(callback) {
+        try {
+            return callback();
+        } catch(e) {
+            throw new Error(e);
+        }
     }
 }

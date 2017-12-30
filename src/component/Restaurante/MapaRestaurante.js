@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import RestauranteService from "../../service/Restaurante";
+import LocalizacaoService from "../../service/Localizacao";
 import Mapa from "./../GoogleMaps";
-import Loading from "./../Loading";
+import Loading from "../template/Loading";
 
 export default class MapaRestaurante extends Component {
 
     constructor(props) {
         super(props);
         this.restauranteService = new RestauranteService();
+        this.localizacaoService = new LocalizacaoService();
         this.state = {
             isGettingPosition: false,
             location: {},
@@ -38,19 +40,19 @@ export default class MapaRestaurante extends Component {
     /**
      * @description Obtêm a posição atual.
      */
-    getPosicaoAtual() {
+    async getPosicaoAtual() {
         const { lat, lng } = this.props.match.params;
+
         if (lat && lng) {
             this.alterarDadoState("location", { lat: parseFloat(lat), lng: parseFloat(lng) });
             this.getRestaurantesProximos(lat, lng);
-            this.alterarDadoState("isGettingPosition", true);
         } else if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                this.alterarDadoState("location", {lat: position.coords.latitude, lng: position.coords.longitude});
-                this.getRestaurantesProximos(position.coords.latitude, position.coords.longitude);
-                this.alterarDadoState("isGettingPosition", true);
-            });
+            const position = await this.localizacaoService.getPosicaoAtual();
+            this.alterarDadoState("location", {lat: position.coords.latitude, lng: position.coords.longitude});
+            this.getRestaurantesProximos(position.coords.latitude, position.coords.longitude);
         }
+
+        this.alterarDadoState("isGettingPosition", true);
     }
 
     /**
