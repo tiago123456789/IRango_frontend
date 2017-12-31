@@ -5,11 +5,12 @@ services:
       dockerfile: ./Dockerfile
       context: .
     ports:
-      - 8000:3000
+      - 80:3000
     volumes:
       - .:/home/app/irango_frontend/
       - /home/app/irango_frontend/node_modules
-    environment:
-          - NODE_ENV: dev
     image: tiagorosadacosta/irango
+    command: npm run build
+    environment:
+      - NODE_ENV: prd
     container_name: irangoFrontend

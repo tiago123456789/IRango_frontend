@@ -25,7 +25,7 @@ export default class Restaurante {
      */
     findAllUpcoming(lat, lng) {
         return this._tryCatch(async () => {
-            const response = await axios.get(`${this._url}${this._endpoint}/distancia?lat=${lat}&lng=${lng}`);
+            const response = await axios.get(`${this._url}${this._endpoint}/distancias?lat=${lat}&lng=${lng}`);
             return response.data;
         });
     }
